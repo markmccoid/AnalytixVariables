@@ -1,0 +1,26 @@
+{
+  "name": "analytixvars",
+  "version": "1.0.0",
+  "description": "Management of Analytix variables via JSON encoded data",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mark McCoid",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.11.4",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.11.1",
+    "jshint": "^2.9.2",
+    "jshint-loader": "^0.8.3",
+    "webpack": "^1.13.1"
+  },
+  "dependencies": {
+    "js2xmlparser": "^1.0.0",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "react-router": "^2.6.1"
+  }
+}
