@@ -1,5 +1,5 @@
 var React = require('react');
-
+var {Link, IndexLink} = require('react-router');
 
 var Navbar = React.createClass({
 	render: function() {
@@ -7,19 +7,28 @@ var Navbar = React.createClass({
 			<div className="top-bar">
 				<div className="top-bar-left">
 					<ul className="menu">
-						<li className="menu-text"> React Weather App</li>
+						<li className="menu-text"> Analytix Variable Editor</li>
 						<li>
-							<IndexLink to="/varview?qvw=SF" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>SalesFlash </IndexLink>
+							<IndexLink to="/?qvw=salesflash" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>SalesFlash </IndexLink>
 						</li>
 						<li>
-							<Link to="/varview?qvw=AA" activeClassName="active" activeStyle={{fontWeight: 'bold'}}> Advertising Analytix </Link>
+							<Link to="/?qvw=advertising" activeClassName="active" activeStyle={{fontWeight: 'bold'}}> Advertising Analytix </Link>
 						</li>
 						<li>
-							<Link to="/varview?qvw=CA" activeClassName="active" activeStyle={{fontWeight: 'bold'}}> Contracts Analytix </Link>
-						</li>			
+							<Link to="/?qvw=common" activeClassName="active" activeStyle={{fontWeight: 'bold'}}> Common Variables </Link>
+						</li>	
+					</ul>
+				</div>					
+				<div className="top-bar-right">
+					<ul className="menu">
+						<li>
+							<Link to="/about" activeClassName="active" activeStyle={{fontWeight: 'bold'}}> About </Link>
+						</li>		
 					</ul>
 				</div>
 			</div>
 		);
 	}
-})
+});
+
+module.exports = Navbar;

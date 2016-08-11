@@ -1,11 +1,12 @@
 var React = require('react');
 var VarView = require('VarView');
 
-var Display = React.createClass({
+var GroupSelect = React.createClass({
 //getInitialState
 	getInitialState: function() {
 		return {
-			groupSelected: "All"
+			groupSelected: "All",
+			currentGroups: []
 		}
 	},
 //FUNCTION - renderNames
@@ -28,67 +29,63 @@ var Display = React.createClass({
 //FUNCTION - groupChange	
 	groupChange: function(e) {
 		this.setState({groupSelected: e.target.value});
-
 	},
+	// componentDidUpdate: function () {
+	
+	// 	//Checking to see if the this.state.groupSelected is in the current groups list.
+	// 	//this is so that if changing the varList (like from SalesFlash to Common), we reset
+	// 	//the groupSelecte to "All".
+	// 	if( !this.state.currentGroups.includes(this.state.groupSelected) ) {
+	// 		this.setState({groupSelected: "All"});
+	// 	console.log('GroupSelect: cgs - ' + this.state.groupSelected);
+	// 	}
+
+	// },
 //FUNCTION - displayGroups	
-	displayGroups: function(){
-		var data = this.props.varList;
-
-		//Create "All" element so that we have a way to show all variables
-		var allElement = {group: "All"};
-		data.unshift(allElement); //unshift (add as first element in array) "All" on to object array 
-
-		//array.filter will call this to return distinct group names from data array
-		var makeDistinct = function(value, idx, arr){
-		  	if(idx > 0){
-		    	if (value === arr[idx-1]) {
-		      		return false;
-		    	} else {
-		      		return true;
-		    	}
-		  	} else {
-		    	return true;
-		  	}
-		};
-
-		//Get a list of group names from data (array of objects) and sort them
-				//let groupList = Object.keys(data).map(key => data[key].group).sort();
-		let groupList = data.map(key => key.group).sort();
-		
-		//Make the groupList distinct
-		let groupListDistinct = groupList.filter(makeDistinct);
-		
+	displayGroups: function(){		
 		//function to create option list
-		var filteredGroup = groupListDistinct.map(function(arrItem){
+		let groupListDistinct = this.props.groupList;
+		var filteredGroup = groupListDistinct.map(function(arrItem, idx){
 			let output = '';
 			let groupName = arrItem;
-			output = <option value={groupName}>{groupName}</option>;
-		  return (output);
+			output = <option value={groupName} key={idx}>{groupName}</option>;
+		  	return (output);
 		});
+		//Checking to see if the this.state.groupSelected is in the current groups list.
+		//this is so that if changing the varList (like from SalesFlash to Common), we reset
+		//the groupSelecte to "All".
+		// if( !groupListDistinct.includes(currentGroupSelected) ) {
+		// 	this.setState({groupSelected: "All"});
+		// console.log('GroupSelect: cgs - ' + currentGroupSelected);
+		// }
 		return (
+			<label>Variable Groups for {this.props.qvw}
 			<select onChange={this.groupChange} value={this.state.groupSelected} ref="groupSelect"> 
 				{filteredGroup} 
 			</select>
+			</label>
 			);
 	},
 //RENDER
 	render: function() {
 		//varList is an Array of Objects [{name: '', value: '', description: '', notes: '', group: '', locked: true }, {name:...}]
 		var varList = this.props.varList;
-		var that = this;
-		var conditionalDisplay = function() {
+		
+		console.log('GroupSelect: ' + this.state.groupSelected + ' ' + this.props.qvw)
+		//using ES6 arrow function so that "this" stays bound to correct context
+		var conditionalDisplay = () => {
 			if (varList.length > 0) {
-				return (that.displayGroups());
+				return (this.displayGroups());
 			}
 		};
 		return (
 			<div>
 				<h3>Select Variable Group</h3>
 				{conditionalDisplay()}
-				<VarView group={this.state.groupSelected} varListView={varList} />
+				<VarView group={this.state.groupSelected} varListView={varList} qvw={this.props.qvw}/>
 			</div>
 		);
 	}
 });
 
-module.exports = Display;
+module.exports = GroupSelect;

@@ -1,7 +1,7 @@
 var jsonData = { "Variables" : {
       "SALESFLASH" : [
   {
-    "name": "vSC_date_CalendarYearField",
+    "name": "SF-vSC_date_CalendarYearField",
     "value": "=IF(vSC_DateType='INSERT', 'Insert_CalendarYear' ,  \n IF(vSC_DateType='POSTING',  'Posting_CalendarYear', 'Create_CalendarYear'))",
     "description": "This variable will be used in the CalendarYear list box and will change the field based on the value in the vSC_DateType field",
     "notes": "Selection Criteria Tab",
@@ -645,7 +645,7 @@ var jsonData = { "Variables" : {
     ],
   "ADVERTISINGANALYTIX" : [
   {
-    "name": "vSC_date_CalendarYearField",
+    "name": "AA-vSC_date_CalendarYearField",
     "value": "=IF(vSC_DateType='INSERT', 'Insert_CalendarYear' ,  \n IF(vSC_DateType='POSTING',  'Posting_CalendarYear', 'Create_CalendarYear'))",
     "description": "This variable will be used in the CalendarYear list box and will change the field based on the value in the vSC_DateType field",
     "notes": "Selection Criteria Tab",
