@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "js2xmlparser": "^1.0.0",
+    "json-loader": "^0.5.4",
     "react": "^0.14.8",
     "react-dom": "^0.14.7",
     "react-router": "^2.6.1"

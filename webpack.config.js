@@ -21,12 +21,13 @@ module.exports = {
 	resolve: {
 		root: __dirname,
 		alias: {
-			Main: 'app/components/Main.jsx',
+			Main: 'app/components/Main.jsx',	
 			Navbar: 'app/components/Navbar.jsx',
 			About: 'app/components/About.jsx',
 			Display: 'app/components/Display.jsx',
 			GroupSelect: 'app/components/GroupSelect.jsx',
 			VarView: 'app/components/VarView.jsx',
+			EditVar: 'app/components/EditVar.jsx',
 			Help: 'app/components/Help.jsx',
 			applicationStyles: 'app/styles/app.scss'
 //			ErrorModal: 'app/components/ErrorModal.jsx',

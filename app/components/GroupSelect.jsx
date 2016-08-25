@@ -25,7 +25,7 @@ var GroupSelect = React.createClass({
 		//varList is an Array of Objects [{name: '', value: '', description: '', notes: '', group: '', locked: true }, {name:...}]
 		var varList = this.props.varList;
 		
-console.log('GroupSelect: ' + this.props.groupSelected + ' ' + this.props.qvw );
+console.log('GroupSelect: ' + this.props.groupSelected + ' ' + this.props.qvw  + ' : ' + varList.ID);
 console.log('---------------------------------');
 		//using ES6 arrow function so that "this" stays bound to correct context
 		var conditionalDisplay = () => {
@@ -47,7 +47,7 @@ console.log('---------------------------------');
 		return (
 			<div>
 				{conditionalDisplay()}
-				<VarView group={this.props.groupSelected} varListView={filteredObj} qvw={this.props.qvw}/>
+				<VarView group={this.props.groupSelected} varListView={filteredObj} qvw={this.props.qvw} onVarSave={this.props.onVarSave}/>
 			</div>
 		);
 	}

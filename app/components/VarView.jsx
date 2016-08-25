@@ -1,10 +1,32 @@
 var React = require('react');
 
 var VarView = React.createClass({
-	edit: function(e) {
+	getInitialState: function () {
+		return ({
+			editing: false,
+			idToEdit: ''
+		})
+	},
+	edit: function(id, e) {
 		e.preventDefault();
-		alert('this is e: ' + e.target);
-		console.dir(e);
+		//set state so that variable to edit will be shown
+		this.setState({editing: true, idToEdit: id});
+		//this.props.location.state = '/edit?id=' + id;
+	},
+	cancel: function(e) {
+		e.preventDefault();
+		this.setState({editing: false, idToEdit: ''})
+	},
+	save: function(e){
+		e.preventDefault();
+		//This function is being passed from Display.jsx
+		var newVarValues = {
+				newVarName: this.refs.varName.value,
+				newVarDescription: this.refs.varDescription.value,
+				newVarExpression: this.refs.varExpression.value,
+			};
+		this.props.onVarSave(this.state.idToEdit, newVarValues);
+		this.setState({editing: false, idToEdit: ''});
 	},
 //================================
 	render: function() {
@@ -21,7 +43,11 @@ var VarView = React.createClass({
 		// });
 
 		//Take filtered list and build output to show.
+		
+		let {editing, idToEdit} = this.state;
+		console.log('VarView - Editing: '  + editing);
 		let outputNames = varListView.map((obj, idx) =>  {
+
 			//No vars for group all
 			if (obj.group === 'All') {
 				return null;
@@ -30,39 +56,82 @@ var VarView = React.createClass({
 			if (idx % 2 === 0) {
 				calloutClass = 'callout warning';
 			} else {
-				calloutClass = 'callout secondary'
+				calloutClass = 'callout secondary';
 			}
 
-			let reactKey = this.props.qvw + obj.name + idx;
-			return (
-			<div className={calloutClass} key={reactKey}>
+			let jsxOutput = '';
+			if (editing && idToEdit == obj.ID) {
+			//if (false ) {
+
+				jsxOutput = 
+				<div className={calloutClass} key={obj.ID} id={obj.ID} >
 				<div className="row" >
 				    <div className="medium-4 columns">
-				      <label>Variable Name
-				        <input type="text" placeholder="Variable Name" defaultValue={obj.name} />
-				      </label>
+				      <label className="value-label">Variable Name</label>
+				        <input type="text" placeholder="Variable Name" defaultValue={obj.name} ref="varName"/>
+				      
 				    </div>
 				    <div className="medium-8 columns">
-				      <label>Description
-				        <input type="text" placeholder="Variable Description" defaultValue={obj.description} />
-				      </label>
+				      <label className="value-label">Description</label>
+				        <input type="text" placeholder="Variable Description" defaultValue={obj.description} ref="varDescription"/>
+				      
 				    </div>
 				</div>
 				<div className="row">
 				    <div className="medium-12 columns">
-				      <label>Expression
-				        <textarea placeholder="Variable Expression" defaultValue={obj.value}></textarea>
-				      </label>
+				      <label className="value-label">Expression</label>
+				        <textarea placeholder="Variable Expression" defaultValue={obj.value} ref="varExpression"></textarea>
+				      
 				    </div>
 				</div>
 				<div className="row">
 					<div className="medium-12 columns">
-					<span>
-						<button className="button small" onClick={this.edit}>Edit</button>
+					<span className="btn-padding">
+						<button className="button small" onClick={this.save}>Save</button>
+					</span>
+					<span className="btn-padding">
+						<button className="button small" onClick={this.cancel}>Cancel</button>
 					</span>
 					</div>
 				</div>
-			</div>);
+			</div>
+			} else {
+				jsxOutput =
+			    <div className={calloutClass} key={obj.ID} id={obj.ID} >
+			    <div className="row" >
+			    <h5 className="float-left padleftright">Group: {obj.group} </h5>
+			    <h5 className="float-right padleftright">{obj.locked===true ? "Locked" : ""} </h5>
+			    </div>
+	                <div className="row" >
+	                    <div className="medium-4 columns">
+	                      <p className="value-label">Variable Name:</p>
+	                        <p className="value-view">{obj.name} </p>
+	                      
+	                    </div>
+	                    <div className="medium-8 columns">
+	                      <p className="value-label">Description: </p>
+	                      <p className="value-view">{obj.description}</p>
+	                    </div>
+	                </div>
+	                <div className="row">
+	                    <div className="medium-12 columns">
+	                        <p className="value-label">Expression</p>
+	                        <p className="value-view">{obj.value}</p>
+	                    </div>
+	                </div>
+	                <div className="row">
+	                    <div className="medium-12 columns">
+	                    <span>
+	                        <button className="button small" onClick={(event) => this.edit(obj.ID, event)}>Edit</button>
+	                    </span>
+	                    </div>
+	                </div>
+	            </div>;
+	        }
+
+
+			let reactKey = this.props.qvw + obj.name + idx;
+			return (jsxOutput);
 		});
 
 		let headerText = '';
@@ -74,10 +143,11 @@ console.log('---------------------------------');
 		return (
 		<div>
 			{headerText}
-			<form>
+			<div>
 				{outputNames}
-			</form>
+			</div>
 		</div>
+
 		);
 	}
 });
