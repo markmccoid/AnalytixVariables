@@ -20,11 +20,21 @@ var GroupSelect = React.createClass({
 			</label>
 			);
 	},
+	onSearchChange: function (e) {
+		var searchString = this.refs.input.value;
+		
+		//Call function on Display component to do searching.
+		this.props.onSearchChange(searchString);
+	},
+	doneSearching: function (e) {
+		e.preventDefault();
+		this.refs.inputForm.reset();
+	},
 //================================
 	render: function() {
 		//varList is an Array of Objects [{name: '', value: '', description: '', notes: '', group: '', locked: true }, {name:...}]
 		var varList = this.props.varList;
-		
+console.group("GroupSelect.jsx");		
 console.log('GroupSelect: ' + this.props.groupSelected + ' ' + this.props.qvw  + ' : ' + varList.ID);
 console.log('---------------------------------');
 		//using ES6 arrow function so that "this" stays bound to correct context
@@ -44,9 +54,25 @@ console.log('---------------------------------');
 				}
 		});
 
+		if (this.props.searchString.length > 0) {
+			//convert input string to a regular expression object to pass to match function
+			let reSearchString = new RegExp(this.props.searchString, "g");
+			filteredObj = filteredObj.filter(function(item){
+				return item.name.toLowerCase().match(reSearchString);
+			});
+		}
+console.groupEnd();
 		return (
 			<div>
 				{conditionalDisplay()}
+				<form ref="inputForm" onSubmit={this.doneSearching}>
+					<input 
+						type="text" 
+						ref="input"
+						value={this.props.searchString}
+						onChange={this.onSearchChange} 
+					/>
+				</form>
 				<VarView group={this.props.groupSelected} varListView={filteredObj} qvw={this.props.qvw} onVarSave={this.props.onVarSave}/>
 			</div>
 		);
