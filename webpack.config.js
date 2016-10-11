@@ -1,13 +1,14 @@
 var webpack = require('webpack');
+var path = require('path');
 
 module.exports = {
 	entry: [
 		'script!jquery/dist/jquery.min.js',
 		'script!foundation-sites/dist/foundation.min.js',
-		'./app/app.jsx'],
+		'./app/app.js'],
 	output: {
 		path: __dirname,
-		filename: "./build/bundle.js"
+		filename: './build/bundle.js'
 	},
 	externals: {
 		jquery: 'jQuery'
@@ -17,31 +18,24 @@ module.exports = {
 			'$': 'jquery',
 			'jQuery': 'jquery'
 		})
-	],	
+	],
 	resolve: {
 		root: __dirname,
+		modulesDirectories: [
+			'node_modules',
+			'./app/components',
+			'./app/API'
+		],
 		alias: {
-			Main: 'app/components/Main.jsx',	
-			Navbar: 'app/components/Navbar.jsx',
-			About: 'app/components/About.jsx',
-			Display: 'app/components/Display.jsx',
-			GroupSelect: 'app/components/GroupSelect.jsx',
-			VarView: 'app/components/VarView.jsx',
-			EditVar: 'app/components/EditVar.jsx',
-			Help: 'app/components/Help.jsx',
-			applicationStyles: 'app/styles/app.scss'
+			applicationStyles: 'app/styles/app.scss',
+			actions: 'app/actions/actions.js',
+			reducers: 'app/reducers/reducers.js',
+			configureStore: 'app/store/configureStore.js'
 //			ErrorModal: 'app/components/ErrorModal.jsx',
 		},
 		extensions: ['','.js','.jsx']
 	},
 	module: {
-		preLoaders: [
-			{
-			test: /\.js$/,
-			exclude: /node_modules/,
-			loader: "jshint-loader"
-			}
-		],
 		loaders: [
 			{
 				loader: 'babel-loader',
@@ -53,5 +47,10 @@ module.exports = {
 			}
 		]
 	},
+	sassLoader: {
+		includePaths: [
+			path.resolve(__dirname, './node_modules/foundation-sites/scss')
+		]
+	},
 	devtool: 'cheap-module-eval-source-map'
-}
+};

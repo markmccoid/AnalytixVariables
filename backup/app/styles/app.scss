@@ -1,0 +1,28 @@
+$header-img: url('/build/edit.png');
+
+.padleftright {
+	padding: 0 .7em;
+}
+
+.editbtn {
+	background-image: $header-img;
+	background-color: #DEF0FC;
+	border: solid 1px black;
+	width: 35px;
+	height: 35px;
+}
+
+.value-view {
+	border: 1px solid black;
+	padding: 5px;
+	background-color: #cccccc;
+}
+
+.value-label {
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+.btn-padding {
+	padding: 0 10px 0 0;
+}

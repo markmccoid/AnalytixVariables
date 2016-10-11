@@ -2,8 +2,9 @@ var React = require('react');
 var VarView = require('VarView');
 
 var GroupSelect = React.createClass({
+
 //================================
-	displayGroups: function(){		
+	displayGroups: function(){
 		//function to create option list
 		let groupListDistinct = this.props.groupList;
 		var filteredGroup = groupListDistinct.map(function(arrItem, idx){
@@ -14,15 +15,15 @@ var GroupSelect = React.createClass({
 		});
 		return (
 			<label>Variable Groups for {this.props.qvw}
-			<select onChange={this.props.groupChange} value={this.props.groupSelected} ref="groupSelect"> 
-				{filteredGroup} 
+			<select onChange={this.props.groupChange} value={this.props.groupSelected} ref="groupSelect">
+				{filteredGroup}
 			</select>
 			</label>
 			);
 	},
 	onSearchChange: function (e) {
 		var searchString = this.refs.input.value;
-		
+
 		//Call function on Display component to do searching.
 		this.props.onSearchChange(searchString);
 	},
@@ -34,7 +35,7 @@ var GroupSelect = React.createClass({
 	render: function() {
 		//varList is an Array of Objects [{name: '', value: '', description: '', notes: '', group: '', locked: true }, {name:...}]
 		var varList = this.props.varList;
-console.group("GroupSelect.jsx");		
+console.group("GroupSelect.jsx");
 console.log('GroupSelect: ' + this.props.groupSelected + ' ' + this.props.qvw  + ' : ' + varList.ID);
 console.log('---------------------------------');
 		//using ES6 arrow function so that "this" stays bound to correct context
@@ -44,36 +45,36 @@ console.log('---------------------------------');
 			}
 		};
 
-		//Filter passed varListView so only passed "this.props.group" shows
-		//or is "All" is passed, show all variables
-		let filteredObj = varList.filter((value, index, arr) => {
-				if (value.group === this.props.groupSelected || this.props.groupSelected === 'All') {
-					return true;
-				} else {
-					return false;
-				}
-		});
+		// //Filter passed varListView so only passed "this.props.group" shows
+		// //or is "All" is passed, show all variables
+		// let filteredObj = varList.filter((value, index, arr) => {
+		// 		if (value.group === this.props.groupSelected || this.props.groupSelected === 'All') {
+		// 			return true;
+		// 		} else {
+		// 			return false;
+		// 		}
+		// });
 
-		if (this.props.searchString.length > 0) {
-			//convert input string to a regular expression object to pass to match function
-			let reSearchString = new RegExp(this.props.searchString, "g");
-			filteredObj = filteredObj.filter(function(item){
-				return item.name.toLowerCase().match(reSearchString);
-			});
-		}
+		// if (this.props.searchString.length > 0) {
+		// 	//convert input string to a regular expression object to pass to match function
+		// 	let reSearchString = new RegExp(this.props.searchString, "g");
+		// 	filteredObj = filteredObj.filter(function(item){
+		// 		return item.name.toLowerCase().match(reSearchString);
+		// 	});
+		//}
 console.groupEnd();
 		return (
 			<div>
 				{conditionalDisplay()}
 				<form ref="inputForm" onSubmit={this.doneSearching}>
-					<input 
-						type="text" 
+					<input
+						type="text"
 						ref="input"
 						value={this.props.searchString}
-						onChange={this.onSearchChange} 
+						onChange={this.onSearchChange}
 					/>
 				</form>
-				<VarView group={this.props.groupSelected} varListView={filteredObj} qvw={this.props.qvw} onVarSave={this.props.onVarSave}/>
+
 			</div>
 		);
 	}

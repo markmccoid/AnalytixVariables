@@ -1,6 +1,9 @@
 var React = require('react');
+var VarsAPI = require('VarsAPI');
+var { connect } = require('react-redux');
+var actions = require('actions');
 
-var VarView = React.createClass({
+var VarList = React.createClass({
 	getInitialState: function () {
 		return ({
 			editing: false,
@@ -25,28 +28,22 @@ var VarView = React.createClass({
 				newVarDescription: this.refs.varDescription.value,
 				newVarExpression: this.refs.varExpression.value,
 			};
-		this.props.onVarSave(this.state.idToEdit, newVarValues);
+		//this.props.onVarSave(this.state.idToEdit, newVarValues);
+		this.props.dispatch(actions.updateVariableFile(this.state.idToEdit, newVarValues));
 		this.setState({editing: false, idToEdit: ''});
 	},
 //================================
 	render: function() {
-		//varList is an Array of Objects [{name: '', value: '', description: '', notes: '', group: '', locked: true }, {name:...}]
-		let varListView = this.props.varListView;
-		// //Filter passed varListView so only passed "this.props.group" shows
-		// //or is "All" is passed, show all variables
-		// let filteredObj = varListView.filter((value, index, arr) => {
-		// 		if (value.group === this.props.group || this.props.group === 'All') {
-		// 			return true;
-		// 		} else {
-		// 			return false;
-		// 		}
-		// });
+		//varData is an Array of Objects [{name: '', value: '', description: '', notes: '', group: '', locked: true }, {name:...}]
+		//let varListView = this.props.varListView;
+		let varData = this.props.variables.varData;
+		let	searchText = this.props.searchText;
+		let	groupSelected = this.props.variables.groupSelected;
 
-		//Take filtered list and build output to show.
-		
 		let {editing, idToEdit} = this.state;
-		console.log('VarView - Editing: '  + editing);
-		let outputNames = varListView.map((obj, idx) =>  {
+		console.log(`VarList - Editing: ${editing} with Search Text of ${searchText}`);
+
+		let outputNames = VarsAPI.filterVars(varData, searchText, groupSelected).map((obj, idx) =>  {
 
 			//No vars for group all
 			if (obj.group === 'All') {
@@ -63,25 +60,25 @@ var VarView = React.createClass({
 			if (editing && idToEdit == obj.ID) {
 			//if (false ) {
 
-				jsxOutput = 
+				jsxOutput =
 				<div className={calloutClass} key={obj.ID} id={obj.ID} >
 				<div className="row" >
 				    <div className="medium-4 columns">
 				      <label className="value-label">Variable Name</label>
 				        <input type="text" placeholder="Variable Name" defaultValue={obj.name} ref="varName"/>
-				      
+
 				    </div>
 				    <div className="medium-8 columns">
 				      <label className="value-label">Description</label>
 				        <input type="text" placeholder="Variable Description" defaultValue={obj.description} ref="varDescription"/>
-				      
+
 				    </div>
 				</div>
 				<div className="row">
 				    <div className="medium-12 columns">
 				      <label className="value-label">Expression</label>
 				        <textarea placeholder="Variable Expression" defaultValue={obj.value} ref="varExpression"></textarea>
-				      
+
 				    </div>
 				</div>
 				<div className="row">
@@ -106,7 +103,7 @@ var VarView = React.createClass({
 	                    <div className="medium-4 columns">
 	                      <p className="value-label">Variable Name:</p>
 	                        <p className="value-view">{obj.name} </p>
-	                      
+
 	                    </div>
 	                    <div className="medium-8 columns">
 	                      <p className="value-label">Description: </p>
@@ -129,30 +126,28 @@ var VarView = React.createClass({
 	            </div>;
 	        }
 
-
-			let reactKey = this.props.qvw + obj.name + idx;
 			return (jsxOutput);
 		});
 
 		let headerText = '';
-		if (varListView.length>0) {
-			headerText = <h3>Variables for group {this.props.group}</h3>;
+		if (varData.length > 0) {
+			headerText = <h3>Variables for group {groupSelected}</h3>;
 		}
-console.log('varView: ' + this.props.group);
-console.log('---------------------------------');
 		return (
-		<div>
-			{headerText}
 			<div>
-				{outputNames}
+				{headerText}
+				<div>
+					{outputNames}
+				</div>
 			</div>
-		</div>
-
 		);
 	}
 });
 
-module.exports = VarView;
+export default connect(
+	(state) => {
+		return state;
+})(VarList);
 
 	//OLD Object Keys way of getting info from Array until I realized it was an array!!s
 		// var outputNames = Object.keys(data).map((key) =>  {
